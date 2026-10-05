@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pak Askari Education System - Feedback Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        askariGreen: '#15803d',
+                        askariDarkGreen: '#115e59',
+                        askariNavy: '#1e3a8a',
+                        askariGold: '#eab308',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #14532d 50%, #1e3a8a 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(16px);
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex items-center justify-center p-3 sm:p-6 min-h-screen">
+
+    <div class="w-full max-w-2xl glass-card rounded-2xl shadow-2xl overflow-hidden flex flex-col relative border border-white/20">
+        
+        <header class="bg-gradient-to-r from-askariGreen via-askariNavy to-askariGreen text-white p-3.5 text-center border-b-4 border-askariGold relative shadow-md">
+            <div class="flex items-center justify-center space-x-3">
+                <div class="text-left">
+                    <h1 class="text-xl sm:text-2xl font-extrabold tracking-wide text-white uppercase leading-tight">Pak Askari College</h1>
+                    <p class="text-xs text-askariGold font-semibold tracking-wider uppercase">Education System</p>
+                </div>
+            </div>
+        </header>
+
+        <div id="progressBarContainer" class="hidden bg-slate-100 border-b border-slate-200 px-6 py-2.5">
+            <div class="flex justify-between items-center text-xs font-semibold text-slate-500 mb-1">
+                <span id="progressStepText">Step 1 of 4</span>
+                <span id="progressPercentText" class="text-askariGreen font-bold">25%</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                <div id="progressBarFill" class="bg-gradient-to-r from-askariGreen to-askariNavy h-2 rounded-full transition-all duration-500" style="width: 25%"></div>
+            </div>
+        </div>
+
+        <main class="flex-1 p-4 sm:p-6 overflow-y-auto">
+
+            <!-- ALREADY SUBMITTED SCREEN -->
+            <div id="blockedScreen" class="hidden flex flex-col items-center justify-center text-center py-10 space-y-4">
+                <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner">
+                    <i class="fa-solid fa-ban"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-askariNavy">Form Already Submitted!</h2>
+                <p class="text-sm text-slate-600 max-w-sm mx-auto">Aap is device/browser se pehle hi feedback form fill kar chuke hain.</p>
+            </div>
+
+            <!-- SCREEN 1 -->
+            <div id="screen1" class="flex flex-col items-center justify-center text-center py-4 space-y-5">
+                <div class="space-y-1.5">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-askariNavy">Welcome in <br/><span class="text-askariGreen">Pak Askari College</span></h2>
+                    <p class="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto">Official Student Feedback Portal</p>
+                </div>
+                <button id="enterBtn" class="w-full max-w-xs bg-gradient-to-r from-askariGreen to-askariNavy text-white font-bold py-3.5 px-8 rounded-xl shadow-lg transition-all duration-200 flex items-center justify-center space-x-3 text-lg cursor-pointer">
+                    <span>ENTER</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- SCREEN 2 -->
+            <div id="screen2" class="hidden space-y-5">
+                <div class="border-b border-slate-200 pb-3">
+                    <h2 class="text-xl font-bold text-askariNavy flex items-center">
+                        <i class="fa-solid fa-user-graduate text-askariGreen mr-2.5"></i>
+                        Student Information
+                    </h2>
+                </div>
+                <form id="studentForm" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Student Name *</label>
+                        <input type="text" id="studentName" required placeholder="Enter student name" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-askariGreen outline-none text-slate-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Father Name *</label>
+                        <input type="text" id="fatherName" required placeholder="Enter father name" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-askariGreen outline-none text-slate-800">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Class *</label>
+                            <select id="studentClass" required class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-askariGreen outline-none bg-white">
+                                <option value="" disabled selected>Select Class</option>
+                                <option value="11th">11th Class (1st Year)</option>
+                                <option value="12th">12th Class (2nd Year)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Group *</label>
+                            <select id="studentGroup" required class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-askariGreen outline-none bg-white">
+                                <option value="" disabled selected>Select Group</option>
+                                <option value="PM">Pre-Medical (PM)</option>
+                                <option value="PE">Pre-Engineering (PE)</option>
+                                <option value="CS">Computer Science (CS)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="pt-4 flex justify-between items-center">
+                        <button type="button" id="backToScreen1" class="px-5 py-2.5 rounded-lg border border-slate-300 text-slate-600 font-semibold">Back</button>
+                        <button type="submit" class="bg-askariGreen hover:bg-emerald-700 text-white px-7 py-2.5 rounded-lg font-bold shadow-md">Next</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- SCREEN 3 -->
+            <div id="screen3" class="hidden space-y-4">
+                <div class="border-b border-slate-200 pb-3 flex justify-between items-end">
+                    <div>
+                        <h2 class="text-xl font-bold text-askariNavy flex items-center">
+                            <i class="fa-solid fa-chalkboard-user text-askariGreen mr-2.5"></i>
+                            Select Teacher to Feedback
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Apni field ke teachers lazmi hain.</p>
+                    </div>
+                    <span id="teachersProgressBadge" class="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full border border-amber-300">0 Completed</span>
+                </div>
+                <div id="teacherListGrid" class="grid grid-cols-1 gap-3 pt-1"></div>
+                <div class="pt-4 flex justify-between items-center border-t border-slate-100">
+                    <button type="button" id="backToScreen2" class="px-5 py-2.5 rounded-lg border border-slate-300 text-slate-600 font-semibold">Back</button>
+                    <button type="button" id="teachersNextBtn" class="bg-askariGreen hover:bg-emerald-700 text-white px-7 py-2.5 rounded-lg font-bold shadow-md">Next</button>
+                </div>
+            </div>
+
+            <!-- SCREEN 4 -->
+            <div id="screen4" class="hidden space-y-5">
+                <div class="bg-gradient-to-r from-askariGreen to-askariNavy text-white p-4 rounded-xl shadow-md flex items-center justify-between">
+                    <div>
+                        <h3 id="evalTeacherName" class="font-bold text-lg leading-snug">Teacher Name</h3>
+                        <p id="evalTeacherSubject" class="text-xs text-askariGold font-medium">Subject</p>
+                    </div>
+                </div>
+                <form id="evalForm" class="space-y-4">
+                    <div class="space-y-3.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                        <!-- Teaching Criteria -->
+                        <div class="bg-white p-3 rounded-lg border border-slate-200">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Teaching</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <label class="cursor-pointer"><input type="radio" name="teaching" value="5" required class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Excellent</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="teaching" value="3" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Good</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="teaching" value="2" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Better</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="teaching" value="1" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Poor</div></label>
+                            </div>
+                        </div>
+                        <!-- Style Criteria -->
+                        <div class="bg-white p-3 rounded-lg border border-slate-200">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Teaching Style</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <label class="cursor-pointer"><input type="radio" name="style" value="5" required class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Excellent</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="style" value="3" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Good</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="style" value="2" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Better</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="style" value="1" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Poor</div></label>
+                            </div>
+                        </div>
+                        <!-- Behaviour Criteria -->
+                        <div class="bg-white p-3 rounded-lg border border-slate-200">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Behaviour</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <label class="cursor-pointer"><input type="radio" name="behaviour" value="5" required class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Excellent</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="behaviour" value="3" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Good</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="behaviour" value="2" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Better</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="behaviour" value="1" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Poor</div></label>
+                            </div>
+                        </div>
+                        <!-- Management Criteria -->
+                        <div class="bg-white p-3 rounded-lg border border-slate-200">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Class Management</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <label class="cursor-pointer"><input type="radio" name="management" value="5" required class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Excellent</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="management" value="3" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Good</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="management" value="2" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Better</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="management" value="1" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Poor</div></label>
+                            </div>
+                        </div>
+                        <!-- Time Criteria -->
+                        <div class="bg-white p-3 rounded-lg border border-slate-200">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Time Management</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <label class="cursor-pointer"><input type="radio" name="time" value="5" required class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Excellent</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="time" value="3" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Good</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="time" value="2" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Better</div></label>
+                                <label class="cursor-pointer"><input type="radio" name="time" value="1" class="peer hidden"><div class="text-center py-2 px-1 rounded-md border text-xs font-semibold peer-checked:bg-askariGreen peer-checked:text-white">Poor</div></label>
+                            </div>
+                        </div>
+                        <!-- Compliment -->
+                        <div class="bg-white p-3 rounded-lg border border-slate-200">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Compliment *</label>
+                            <textarea id="evalCompliment" required rows="2" placeholder="Write any compliment..." class="w-full p-2.5 rounded-lg border border-slate-300 text-sm"></textarea>
+                        </div>
+                    </div>
+                    <div class="pt-2 flex justify-between items-center">
+                        <button type="button" id="backToScreen3" class="px-5 py-2.5 rounded-lg border border-slate-300 text-slate-600 font-semibold">Back</button>
+                        <button type="submit" class="bg-askariGreen hover:bg-emerald-700 text-white px-7 py-2.5 rounded-lg font-bold shadow-md">Save & Continue</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- SCREEN 5 -->
+            <div id="screen5" class="hidden space-y-5">
+                <div class="border-b border-slate-200 pb-3">
+                    <h2 class="text-xl font-bold text-askariNavy flex items-center">
+                        <i class="fa-solid fa-star text-askariGold mr-2.5"></i>
+                        Your Favorite Teacher
+                    </h2>
+                </div>
+                <form id="favoriteForm" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Teacher Name *</label>
+                        <select id="favTeacherSelect" required class="w-full px-3 py-2.5 rounded-lg border border-slate-300 bg-white"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Reason *</label>
+                        <textarea id="favReason" required rows="4" placeholder="Why is this teacher your favorite?" class="w-full p-3 rounded-lg border border-slate-300 text-sm"></textarea>
+                    </div>
+                    <div class="pt-4 flex justify-between items-center">
+                        <button type="button" id="backToScreen3_from5" class="px-5 py-2.5 rounded-lg border border-slate-300 text-slate-600 font-semibold">Back</button>
+                        <button type="submit" id="btnSubmitFinal" class="bg-askariGreen hover:bg-emerald-700 text-white px-7 py-2.5 rounded-lg font-bold shadow-md flex items-center space-x-2">
+                            <span>Submit Feedback</span>
+                            <i class="fa-solid fa-paper-plane text-xs"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Thank You Modal -->
+    <div id="thankYouModal" class="fixed inset-0 bg-slate-900/85 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-sm w-full text-center shadow-2xl border-2 border-askariGold space-y-5">
+            <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner border border-emerald-300 animate-bounce">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+                <h3 class="text-2xl font-extrabold text-askariNavy">Submitted Successfully!</h3>
+                <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">Thank you for submitting your evaluation.</p>
+            </div>
+            <button id="closeModalBtn" class="w-full bg-askariGreen hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-lg">Close Window</button>
+        </div>
+    </div>
+
+    <script>
+        const SHEETDB_API_URL = "https://sheetdb.io/api/v1/bhggztbje2dg4"; 
+        
+        let studentInfo = { name: '', fatherName: '', class: '', group: '' };
+        let allTeachers = [];
+        let evaluations = {};
+        let currentEditingTeacherId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('askari_form_submitted') === 'true') {
+                document.getElementById('screen1').classList.add('hidden');
+                document.getElementById('blockedScreen').classList.remove('hidden');
+                return;
+            }
+
+            // Event Listeners for Buttons to prevent any click issues
+            document.getElementById('enterBtn').addEventListener('click', () => goToScreen(2));
+            document.getElementById('backToScreen1').addEventListener('click', () => goToScreen(1));
+            document.getElementById('backToScreen2').addEventListener('click', () => goToScreen(2));
+            document.getElementById('backToScreen3').addEventListener('click', () => goToScreen(3));
+            document.getElementById('backToScreen3_from5').addEventListener('click', () => goToScreen(3));
+
+            document.getElementById('studentForm').addEventListener('submit', handleStudentSubmit);
+            document.getElementById('evalForm').addEventListener('submit', saveTeacherEvaluation);
+            document.getElementById('favoriteForm').addEventListener('submit', handleFavoriteSubmit);
+            document.getElementById('teachersNextBtn').addEventListener('click', checkTeachersAndNext);
+            document.getElementById('closeModalBtn').addEventListener('click', resetApp);
+        });
+
+        function goToScreen(screenNumber) {
+            if (localStorage.getItem('askari_form_submitted') === 'true') return;
+            
+            for (let i = 1; i <= 5; i++) {
+                const scr = document.getElementById(`screen${i}`);
+                if (scr) scr.classList.add('hidden');
+            }
+            const activeScr = document.getElementById(`screen${screenNumber}`);
+            if (activeScr) activeScr.classList.remove('hidden');
+
+            const progContainer = document.getElementById('progressBarContainer');
+            if (screenNumber === 1) {
+                progContainer.classList.add('hidden');
+            } else {
+                progContainer.classList.remove('hidden');
+                const progressMap = { 2: 25, 3: 50, 4: 75, 5: 100 };
+                const stepTextMap = { 
+                    2: 'Step 1 of 4: Student Details', 
+                    3: 'Step 2 of 4: Select Teacher', 
+                    4: 'Step 3 of 4: Evaluation', 
+                    5: 'Step 4 of 4: Favorite Teacher' 
+                };
+                document.getElementById('progressPercentText').innerText = `${progressMap[screenNumber]}%`;
+                document.getElementById('progressBarFill').style.width = `${progressMap[screenNumber]}%`;
+                document.getElementById('progressStepText').innerText = stepTextMap[screenNumber];
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function handleStudentSubmit(e) {
+            e.preventDefault();
+            studentInfo.name = document.getElementById('studentName').value.trim();
+            studentInfo.fatherName = document.getElementById('fatherName').value.trim();
+            studentInfo.class = document.getElementById('studentClass').value;
+            studentInfo.group = document.getElementById('studentGroup').value;
+
+            buildAllTeachersList();
+            renderTeacherList();
+            goToScreen(3);
+        }
+
+        function buildAllTeachersList() {
+            const shahistaSubject = (studentInfo.class === '11th') ? 'Urdu & Islamiat' : 'Urdu & PST';
+            
+            let coreTeachers = [
+                { id: 'tariq', name: 'Sir Tariq', subject: 'Physics', mandatory: true },
+                { id: 'sunny', name: 'Sir Sunny', subject: 'English', mandatory: true },
+                { id: 'shahista', name: 'Miss Shahista', subject: shahistaSubject, mandatory: true }
+            ];
+
+            if (studentInfo.group === 'PM') {
+                coreTeachers.push({ id: 'onaiza', name: 'Miss Onaiza', subject: 'Biology', mandatory: true });
+            } else if (studentInfo.group === 'PE') {
+                coreTeachers.push({ id: 'hunain', name: 'Sir Hunain', subject: 'Mathematics', mandatory: true });
+            } else if (studentInfo.group === 'CS') {
+                coreTeachers.push({ id: 'hunain', name: 'Sir Hunain', subject: 'Mathematics', mandatory: true });
+                coreTeachers.push({ id: 'imran', name: 'Sir Imran', subject: 'Computer', mandatory: true });
+            }
+
+            let optionalPool = [];
+            if (studentInfo.group === 'PE') {
+                optionalPool = [
+                    { id: 'imran', name: 'Sir Imran', subject: 'Computer' },
+                    { id: 'onaiza', name: 'Miss Onaiza', subject: 'Biology' }
+                ];
+            } else if (studentInfo.group === 'CS') {
+                optionalPool = [
+                    { id: 'onaiza', name: 'Miss Onaiza', subject: 'Biology' }
+                ];
+            } else if (studentInfo.group === 'PM') {
+                optionalPool = [
+                    { id: 'hunain', name: 'Sir Hunain', subject: 'Mathematics' },
+                    { id: 'imran', name: 'Sir Imran', subject: 'Computer' }
+                ];
+            }
+
+            let map = new Map();
+            coreTeachers.forEach(t => map.set(t.id, { ...t, mandatory: true }));
+            optionalPool.forEach(t => {
+                if (!map.has(t.id)) {
+                    map.set(t.id, { ...t, mandatory: false });
+                }
+            });
+
+            allTeachers = Array.from(map.values());
+        }
+
+        function renderTeacherList() {
+            const container = document.getElementById('teacherListGrid');
+            container.innerHTML = '';
+            let mandatoryCompleted = 0;
+            let mandatoryTotal = allTeachers.filter(t => t.mandatory).length;
+
+            allTeachers.forEach(teacher => {
+                const isCompleted = !!evaluations[teacher.id];
+                if (teacher.mandatory && isCompleted) mandatoryCompleted++;
+
+                const card = document.createElement('div');
+                card.onclick = () => openTeacherEval(teacher.id);
+                card.className = `p-3.5 rounded-xl border transition cursor-pointer flex items-center justify-between shadow-sm hover:shadow-md ${
+                    isCompleted ? 'bg-emerald-50 border-emerald-300 hover:bg-emerald-100' : 'bg-white border-slate-200 hover:border-askariGreen'
+                }`;
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full ${isCompleted ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'} flex items-center justify-center font-bold text-base">
+                            <i class="fa-solid ${isCompleted ? 'fa-check' : 'fa-user-tie'}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm sm:text-base">${teacher.name} ${teacher.mandatory ? '<span class="text-red-500">*</span>' : '<span class="text-xs text-slate-400 font-normal">(Optional)</span>'}</h4>
+                            <p class="text-xs text-slate-500">${teacher.subject}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        ${isCompleted ? `<span class="text-xs bg-emerald-600 text-white font-semibold px-2.5 py-1 rounded-full"><i class="fa-solid fa-circle-check mr-1"></i> Done</span>` : `<span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full border">${teacher.mandatory ? 'Required' : 'Optional'}</span>`}
+                        <i class="fa-solid fa-chevron-right text-slate-400 text-xs ml-1"></i>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            const badge = document.getElementById('teachersProgressBadge');
+            badge.innerText = `${mandatoryCompleted} of ${mandatoryTotal} Required Completed`;
+        }
+
+        function openTeacherEval(teacherId) {
+            currentEditingTeacherId = teacherId;
+            const teacher = allTeachers.find(t => t.id === teacherId);
+            document.getElementById('evalTeacherName').innerText = teacher.name;
+            document.getElementById('evalTeacherSubject').innerText = teacher.subject;
+
+            const form = document.getElementById('evalForm');
+            form.reset();
+
+            const existing = evaluations[teacherId];
+            if (existing) {
+                ['teaching', 'style', 'behaviour', 'management', 'time'].forEach(f => {
+                    const r = form.querySelector(`input[name="${f}"][value="${existing[f]}"]`);
+                    if (r) r.checked = true;
+                });
+                document.getElementById('evalCompliment').value = existing.compliment || '';
+            }
+            goToScreen(4);
+        }
+
+        function saveTeacherEvaluation(e) {
+            e.preventDefault();
+            const form = document.getElementById('evalForm');
+            const formData = new FormData(form);
+
+            evaluations[currentEditingTeacherId] = {
+                teaching: formData.get('teaching'),
+                style: formData.get('style'),
+                behaviour: formData.get('behaviour'),
+                management: formData.get('management'),
+                time: formData.get('time'),
+                compliment: document.getElementById('evalCompliment').value.trim()
+            };
+
+            renderTeacherList();
+            goToScreen(3);
+        }
+
+        function checkTeachersAndNext() {
+            let missingMandatory = allTeachers.filter(t => t.mandatory && !evaluations[t.id]);
+            if (missingMandatory.length > 0) {
+                alert(`Barah-e-karam apni field ke tamam lazmi teachers ka feedback mukammal karein! (${missingMandatory.map(t => t.name).join(', ')})`);
+                return;
+            }
+            populateFavoriteDropdown();
+            goToScreen(5);
+        }
+
+        function populateFavoriteDropdown() {
+            const select = document.getElementById('favTeacherSelect');
+            select.innerHTML = '<option value="" disabled selected>Select Favorite Teacher</option>';
+            allTeachers.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.id;
+                opt.innerText = `${t.name} (${t.subject})`;
+                select.appendChild(opt);
+            });
+        }
+
+        async function handleFavoriteSubmit(e) {
+            e.preventDefault();
+            const btnSubmit = document.getElementById('btnSubmitFinal');
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Submitting...`;
+
+            const favId = document.getElementById('favTeacherSelect').value;
+            const favReason = document.getElementById('favReason').value.trim();
+            const favTeacherObj = allTeachers.find(t => t.id === favId);
+
+            let totalOverallScore = 0;
+            let reportRows = [];
+
+            Object.keys(evaluations).forEach((tid) => {
+                const t = allTeachers.find(item => item.id === tid);
+                if (!t) return;
+                const ev = evaluations[tid];
+                let baseMarks = parseInt(ev.teaching) + parseInt(ev.style) + parseInt(ev.behaviour) + parseInt(ev.management) + parseInt(ev.time);
+                let isFav = (t.id === favId);
+                let bonus = isFav ? 10 : 0;
+                let finalScore = baseMarks + bonus;
+                totalOverallScore += finalScore;
+
+                reportRows.push({
+                    name: t.name,
+                    subject: t.subject,
+                    scores: `${baseMarks}/25 ${isFav ? '(+10 Bonus)' : ''}`,
+                    compliment: ev.compliment
+                });
+            });
+
+            let rowData = {
+                Name: studentInfo.name,
+                FatherName: studentInfo.fatherName,
+                Class: studentInfo.class,
+                Group: studentInfo.group,
+                TeachersData: JSON.stringify(reportRows),
+                FavoriteTeacher: favTeacherObj ? favTeacherObj.name : 'N/A',
+                FavoriteReason: favReason,
+                TotalMarks: totalOverallScore,
+                Timestamp: new Date().toLocaleString()
+            };
+
+            try {
+                await fetch(SHEETDB_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: rowData })
+                });
+            } catch (err) {}
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.setFillColor(21, 128, 61);
+                doc.rect(0, 0, 210, 20, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(14);
+                doc.text("PAK ASKARI COLLEGE - FEEDBACK SUBMITTED", 105, 13, { align: "center" });
+                doc.save(`Feedback_${studentInfo.name.replace(/\s+/g, '_')}.pdf`);
+            } catch (err) {}
+
+            localStorage.setItem('askari_form_submitted', 'true');
+            document.getElementById('thankYouModal').classList.remove('hidden');
+        }
+
+        function resetApp() {
+            document.getElementById('thankYouModal').classList.add('hidden');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
